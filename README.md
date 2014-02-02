@@ -2,8 +2,10 @@ LeapTutorials
 =============
 
 Leap Tutorial code
-=================
+------------------
+
 This is where your code for your tutorials should go. You should check in your commits on a regular basis.
+
 RTFM
 
 1. Start by creating your branch using git checkout
