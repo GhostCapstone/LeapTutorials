@@ -1,4 +1,5 @@
 (function() {
+	'use strict';
 	var canvas = document.getElementById('canvas');
 	var c = canvas.getContext('2d');
 	var controller = new Leap.Controller();
@@ -6,7 +7,7 @@
 	controller.on( 'connect', onControllerConnect );
 	controller.on('deviceConnected', onDeviceConnect);
 	controller.on('deviceDisconnected', onDeviceDisconnect);
-	
+
 	function onControllerConnect() {
 		console.log('Successfully connected.');
 	}
