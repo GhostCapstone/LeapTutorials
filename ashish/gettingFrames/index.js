@@ -4,28 +4,20 @@
 	var button = document.getElementById('unicorn-generator');
 	var c = canvas.getContext('2d');
 	var controller = new Leap.Controller();
-	controller.on( 'connect', onControllerConnect );
-	controller.on('deviceConnected', onDeviceConnect);
-	controller.on('deviceDisconnected', onDeviceDisconnect);
 
-	function onControllerConnect() {
-		console.log('Successfully connected.');
-	}
-
-	function onDeviceConnect() {
-		console.log('A leap device has been connected');
-	}
-
-	function onDeviceDisconnect() {
-		console.log('A leap device has been connected');
-	}
-
-	controller.on( 'ready', function() {
-		// ready code
-	});
-
+	// connect the controller on button press	
 	button.addEventListener('click', function() {
 		controller.connect();
+	});
+
+	controller.on('frame', function(frame) {
+		var numberOfFingers = frame.fingers.length;
+
+		// Define the font shape and size
+		c.font = "30px Arial";
+
+		c.fillText(numberOfFingers, 20, 20);
+
 	});
 
 	
