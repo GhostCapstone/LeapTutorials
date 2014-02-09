@@ -16,8 +16,32 @@
 		// clear the old numbers
 		c.clearRect(0, 0, width, height);
 
+		// draw fingers and hands
+		for (var i = 0; i < frame.hands.length; i++) {
+
+			// draw hand
+			var hand = frame.hands[i];
+			var handPos = leapToScene(frame, hand.palmPosition);
+
+			// pick color for fillStyle
+			c.fillStyle = '#FF5A40'; // const hand color
+
+			// Draw circle at handpos
+			c.beginPath();
+
+			// Draw a circle from 0-2π
+			c.arc(handPos[0], handPos[1], 10, 0, Math.PI*2);
+			c.closePath();
+			c.fill();
+			for (var j = 0; i < hand.fingers.length; i++) {
+				var finger = hand.fingers[i];
+
+			}
+		}
+
 	});
 
+	// Convert leap coordinates to 2d canvas coords
 	function leapToScene (frame, leapPos) {
 		// convert
 		var iBox = frame.interactionBox;
