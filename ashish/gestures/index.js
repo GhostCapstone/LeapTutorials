@@ -2,7 +2,7 @@
 	'use strict';
 
 	// CONSTANTS
-	var KEYTAP_LIFETIME = 3;
+	var KEYTAP_LIFETIME = 0.5;
 	var KEYTAP_START_SIZE = 15;
 	var SCREENTAP_LIFETIME = 1;
 	var SCREENTAP_START_SIZE = 30;
@@ -44,6 +44,9 @@
 		}
 		updateKeyTaps();
 		drawKeyTaps();
+
+		updateScreenTaps();
+		drawScreenTaps();
 	});
 
 	function onCircle(gesture) {
@@ -111,9 +114,51 @@
 			var y = screenTap[1];
 
 			var age = frame.timestamp - screenTap[2];
-
+			age /= 1000000;
+			var completion = age / SCREENTAP_LIFETIME;
+			var timeLeft = 1 - completion;
 			// draw
+
+			c.strokeStyle = "#FFB300";
+			c.lineWidth = 3;
 			
+			c.save(); // save context
+
+			c.translate(x, y);
+
+			// Starting x and y
+			var left = -SCREENTAP_START_SIZE / 2;
+			var top = -SCREENTAP_START_SIZE / 2;
+			var localWidth = SCREENTAP_START_SIZE;
+			var localHeight = SCREENTAP_START_SIZE;
+
+			// Draw the rectangle
+			c.strokeRect(left, top, localWidth, localHeight);
+
+			c.restore(); // Restore context
+			// Drawing the non-static part
+
+			var size = SCREENTAP_START_SIZE * timeLeft;
+			var opacity =  timeLeft;
+			var rotation = timeLeft * Math.PI;
+			
+			c.fillStyle = "rgba( 255 , 179 , 0 , " + opacity + ")";
+			
+			c.save();
+
+			c.translate(x, y);
+			c.rotate(rotation); // spin that square yo
+
+			left = -size / 2;
+			top = -size / 2;
+			localWidth = size;
+			localHeight = size;
+
+			c.fillRect(left, top, localWidth, localHeight);
+
+			c.restore();
+
+
 		}
 	}
 
@@ -125,9 +170,9 @@
 			var x = keyTap[0];
 			var y = keyTap[1];
 			var completion = age / KEYTAP_LIFETIME;
-			var timeleft = 1 - completion;
-			var opacity = timeleft;
-			var radius = KEYTAP_START_SIZE * timeleft;
+			var timeLeft = 1 - completion;
+			var opacity = timeLeft;
+			var radius = KEYTAP_START_SIZE * timeLeft;
 
 			// drawing static circle
 			c.strokeStyle = '#FF2300';
@@ -139,7 +184,7 @@
 
 			// finger circle
 			c.fillStyle = "rgba(256, 33, 0, " + opacity + ")";
-			c.arc(x, y, radious, 0, Math.PI*2);
+			c.arc(x, y, radius, 0, Math.PI*2);
 			c.closePath();
 			c.fill();
 		}
@@ -174,36 +219,36 @@
 	
 	// Convert leap coordinates to 2d canvas coords
 	function leapToScene (leapPos) {
-      // Gets the interaction box of the current frame
-      var iBox = frame.interactionBox;
+		// Gets the interaction box of the current frame
+		var iBox = frame.interactionBox;
 
-      // Gets the left border and top border of the box
-      // In order to convert the position to the proper
-      // location for the canvas
-      var left = iBox.center[0] - iBox.size[0]/2;
-      var top = iBox.center[1] + iBox.size[1]/2;
+		// Gets the left border and top border of the box
+		// In order to convert the position to the proper
+		// location for the canvas
+		var left = iBox.center[0] - iBox.size[0]/2;
+		var top = iBox.center[1] + iBox.size[1]/2;
 
-      // Takes our leap coordinates, and changes them so
-      // that the origin is in the top left corner 
-      var x = leapPos[0] - left;
-      var y = leapPos[1] - top;
+		// Takes our leap coordinates, and changes them so
+		// that the origin is in the top left corner 
+		var x = leapPos[0] - left;
+		var y = leapPos[1] - top;
 
-      // Divides the position by the size of the box
-      // so that x and y values will range from 0 to 1
-      // as they lay within the interaction box
-      x /= iBox.size[0];
-      y /= iBox.size[1];
+		// Divides the position by the size of the box
+		// so that x and y values will range from 0 to 1
+		// as they lay within the interaction box
+		x /= iBox.size[0];
+		y /= iBox.size[1];
 
-      // Uses the height and width of the canvas to scale
-      // the x and y coordinates in a way that they 
-      // take up the entire canvas
-      x *= width;
-      y *= height;
+		// Uses the height and width of the canvas to scale
+		// the x and y coordinates in a way that they 
+		// take up the entire canvas
+		x *= width;
+		y *= height;
 
-      // Returns the values, making sure to negate the sign 
-      // of the y coordinate, because the y basis in canvas 
-      // points down instead of up
-      return [ x , -y ];
+		// Returns the values, making sure to negate the sign 
+		// of the y coordinate, because the y basis in canvas 
+		// points down instead of up
+		return [ x , -y ];
 	}
 	controller.connect();
 })();
