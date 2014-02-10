@@ -6,7 +6,7 @@
 	var width = canvas.width;
 	var height = canvas.height;
 	var c = canvas.getContext('2d');
-	var controller = new Leap.Controller();
+	var controller = new Leap.Controller({enableGestures: true});
 	var frame;
 
 	// animation loop
@@ -19,7 +19,7 @@
 
 	
 	// Convert leap coordinates to 2d canvas coords
-	function leapToScene (frame, leapPos) {
+	function leapToScene (leapPos) {
       // Gets the interaction box of the current frame
       var iBox = frame.interactionBox;
 
