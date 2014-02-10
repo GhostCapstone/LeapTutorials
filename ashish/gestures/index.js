@@ -14,8 +14,68 @@
 		frame = data;
 		c.clearRect(0, 0, width, height); // reset canvas between frames
 
+		for (var i = 0; i < frame.gestures.length; i++) {
+			var gesture = frame.gestures[i];
+			var type = gesture.type;
+			switch(type) {
+				case "circle":
+					onCircle(gesture);
+					break;
 
+				case "swipe":
+					onSwipe(gesture);
+					break;
+				case "screenTap":
+					onScreenTap(gesture);
+					break;
+				case "keyTap":
+					onKeyTap(gesture);
+					break;
+			}
+
+		}
 	});
+
+	function onCircle(gesture) {
+		// get pos
+		var pos = leapToScene(gesture.center);
+		var r = gesture.radius;
+		var clockwise = false;
+
+		if (gesture.normal[2] <= 0) {
+			clockwise = true;
+		}
+
+		// Set up style for the stroke, and fill
+		c.fillStyle = '#39AECF';
+		c.strokeStyle = '39AECF';
+		c.lineWidth = 5;
+
+		// draw the circle
+		c.beginPath();
+		c.arc(pos[0], pos[1], r, 0, Math.PI*2);
+		c.closePath();
+
+		if (clockwise) {
+			c.stroke();
+		} else {
+			c.fill();
+		}
+
+	}
+
+
+	function onSwipe(gesture) {
+
+	}
+
+	function onScreenTap(gesture) {
+		
+	}
+
+	function onKeyTap(gesture) {
+
+	}
 
 	
 	// Convert leap coordinates to 2d canvas coords
