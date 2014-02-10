@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	
+	<script src="http://js.leapmotion.com/0.2.0/leap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		/* Initialize Canvas; jquery shorthand: $("#canvas")[0].getContext('2d') */
+		var canvas = document.getElementById('canvas');
+		var c = canvas.getContext('2d');
+		
+		/* Initializing the Leap controller */
+		var controller = new Leap.Controller();
+		controller.on( 'connect' , function(){
+			alert( 'Successfully connected.' );
+		});
+		
+	</script>
+</body>
+
+</html>
