@@ -11,6 +11,7 @@
 
 <body>
   <canvas id="canvas"></canvas>
+  <button onclick="controller.connect()">Count Fingers (Connect Controller)</button>
   <script src="http://js.leapmotion.com/0.2.0/leap.min.js"></script>
 
   <script>
@@ -34,18 +35,40 @@
       console.log('A Leap device has been connected.');
     });
 
- 
-
     // And that it can be disconnected
     controller.on( 'deviceDisconnected' , function() {
       console.log( 'A Leap device has been disconnected.' );
     });
 
-    // When the controller is ready, spawn the unicorn!
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+    var height = canvas.height;
+    var width = canvas.width;
 
-    controller.on( 'ready' , function(){
-      c.drawImage( img , 0 , 0 );
+    controller.on( 'frame' , function(frame){
+
+      // Clears the canvas so frames don't build on each other.
+      c.clearRect(0, 0, width, height);
+
+      // Gets the number of fingers in each frame
+      var numberOfFingers = frame.fingers.length;
+
+      // Defines the font shape and size
+      c.font = "400px Arial";
+
+      // Tells Canvas how to align text
+      c.textAlign = 'center';
+      c.textBaseline = 'middle';
+
+      // Tells Canvas to draw the The number of fingers,
+      // at the center of the canvas
+      c.fillText( numberOfFingers , width/2 , height/2 );
+    
+    
     });
+
+
+
     controller.connect();
     //dfsdf
   </script>
