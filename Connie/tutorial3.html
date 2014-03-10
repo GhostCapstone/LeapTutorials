@@ -1,0 +1,123 @@
+<html>
+<head>
+   <title> Leap tutorial one</title>
+   <style>
+      #canvas{
+          width:    100%;
+          height:   100%;
+      }      
+   </style>
+ </head>
+
+<body>
+  <canvas id="canvas"></canvas>
+  <button onclick="controller.connect()">Count Fingers (Connect Controller)</button>
+  <script src="http://js.leapmotion.com/0.2.0/leap.min.js"></script>
+
+  <script>
+    // Pulling the Canvas DOM element into Javascript
+    var canvas = document.getElementById('canvas');
+    // Setting up the context we want to use
+    var c =  canvas.getContext('2d');
+    var controller = new Leap.Controller();
+    // Proving that the websocket is open
+    controller.on( 'connect' , function(){
+      console.log( 'Successfully connected.' );
+    });
+
+    // Proving that a device can be connected
+
+    controller.on( 'deviceConnected' , function() {
+      console.log('A Leap device has been connected.');
+    });
+    // And that it can be disconnected
+    controller.on( 'deviceDisconnected' , function() {
+      console.log( 'A Leap device has been disconnected.' );
+    });
+
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+    var height = canvas.height;
+    var width = canvas.width;
+
+ 
+    controller.on( 'frame' , function(frame){
+      c.clearRect(0, 0, width, height);
+
+      function leapToScene( frame , leapPos ){
+
+        var iBox = frame.interactionBox;
+
+        var left = iBox.center[0] - iBox.size[0]/2;
+        var top = iBox.center[1] + iBox.size[1]/2;
+
+        var x = leapPos[0] - left;
+        var y = leapPos[1] - top;
+
+        x /= iBox.size[0];
+        y /= iBox.size[1];
+
+        x *= width;
+        y *= height;
+
+        return [ x , -y ];
+      }
+    
+
+
+
+      for( var i=0; i < frame.hands.length; i++ ){
+        var hand = frame.hands[i];
+        // Getting our hand position
+        var handPos = leapToScene( frame, hand.palmPosition );
+        for( var j = 0; j < hand.fingers.length; j++ ){
+          var finger = hand.fingers[j];
+          // Getting our finger position
+          var fingerPos = leapToScene( frame, finger.tipPosition );
+          //First Draw the Connection
+          // Setting up the style for the stroke
+          c.strokeStyle = "#FFA040";
+          c.lineWidth = 3;
+          // Drawing the path
+          c.beginPath();
+          c.moveTo(handPos[0], handPos[1] );
+          c.lineTo( fingerPos[0] , fingerPos[1] );
+          c.closePath();
+          c.stroke();
+
+
+          //Second Draw the Finger
+          // Setting up the style for the stroke
+          c.strokeStyle = "#39AECF";
+          c.lineWidth = 5;
+
+          // Draw a circle
+          c.beginPath();
+          c.arc(fingerPos[0], fingerPos[1], 6, 0, Math.PI*2);
+          c.closePath();
+          c.stroke();
+
+        }
+
+
+        /*
+            Third draw the hand
+        */
+
+        // Setting up the style for the fill
+        c.fillStyle = "#FF5A40";
+
+        // Draw a circle
+        c.beginPath();
+        c.arc(handPos[0], handPos[1], 100, 0, Math.PI*2);
+        c.closePath();
+        c.fill();
+      }
+    });
+    controller.connect();
+    //dfsdf
+  </script>
+      
+</body>
+
+</html>
