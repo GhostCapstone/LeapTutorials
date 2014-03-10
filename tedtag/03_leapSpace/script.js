@@ -4,7 +4,7 @@ http://stackoverflow.com/questions/6084360/node-js-as-a-simple-web-server/842795
 
 // Setting up Canvas
 var canvas = document.getElementById('canvas');
-var c = canvas.getContext('webgl');
+var c = canvas.getContext('2d');
 
 // Making sure we have the proper aspect ratio for our canvas
  canvas.width = canvas.clientWidth;
