@@ -27,14 +27,12 @@
     controller.on( 'connect' , function(){
       console.log( 'Successfully connected.' );
     });
-
+ 
     // Proving that a device can be connected
 
     controller.on( 'deviceConnected' , function() {
       console.log('A Leap device has been connected.');
     });
-
- 
 
     // And that it can be disconnected
     controller.on( 'deviceDisconnected' , function() {
